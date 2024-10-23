@@ -1,0 +1,1 @@
+pada project ini, kami tidak menggunakan framework apapun untuk PHP nya. hanya menggunakan framework CSS yaitu tailwind CSS.

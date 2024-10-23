@@ -1,0 +1,20 @@
+{
+    "name": "nellynovitawaty/uts_event_registration_arrayyan",
+    "description": "ujian tengah semester Web programming",
+    "autoload": {
+        "psr-4": {
+            "Nellynovitawaty\\UtsEventRegistrationArrayyan\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "arrayyan aprilyanto",
+            "email": "146199861+arrayyan123@users.noreply.github.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "phpoffice/phpspreadsheet": "dev-master",
+        "phpmailer/phpmailer": "dev-master"
+    }
+}
