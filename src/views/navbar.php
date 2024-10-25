@@ -1,4 +1,4 @@
-    <nav class="sm:bg-none absolute sm:border-none z-40 w-full px-2 sm:px-4 py-2.5 rounded bg-gray-800 shadow">
+    <nav class="sm:bg-none absolute sm:border-none z-40 w-full px-2 sm:px-4 py-2.5 bg-gray-800 shadow">
         <div class="container flex flex-wrap justify-between items-center mx-auto">
             <a href="home.php" class="flex items-center">
                 <div class="rounded-full h-auto w-auto mx-2 bg-white">
