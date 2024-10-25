@@ -174,7 +174,7 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     <!-- Gallery banner dengan animasi sebagai backdrop -->
-                    <section id="about-eventure" class="text-gray-600 body-font relative overflow-hidden"> 
+                    <section id="about-eventure" class="text-gray-600 transition-all ease-in-out duration-200 body-font relative overflow-hidden"> 
                         <div class="container px-5 py-24 mx-auto">
                             <div class="flex flex-col text-center w-full mb-20">
                                 <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Eventure</h1>
@@ -422,37 +422,37 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </script>
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const loadMoreBtn = document.getElementById('loadMoreBtn');
-        const loadLessBtn = document.getElementById('loadLessBtn');
-        const banners = document.querySelectorAll('.banner-item');
-        let currentlyVisible = 6;
+        document.addEventListener('DOMContentLoaded', function () {
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            const loadLessBtn = document.getElementById('loadLessBtn');
+            const banners = document.querySelectorAll('.banner-item');
+            let currentlyVisible = 6;
 
-        loadMoreBtn.addEventListener('click', function () {
-            const hiddenBanners = Array.from(banners).slice(currentlyVisible, currentlyVisible + 6);
-            
-            hiddenBanners.forEach(banner => {
-                banner.classList.remove('hidden');
-            });
+            loadMoreBtn.addEventListener('click', function () {
+                const hiddenBanners = Array.from(banners).slice(currentlyVisible, currentlyVisible + 6);
+                
+                hiddenBanners.forEach(banner => {
+                    banner.classList.remove('hidden');
+                });
 
-            currentlyVisible += hiddenBanners.length;
-            if (currentlyVisible >= banners.length) {
-                loadMoreBtn.style.display = 'none';
-            }
-            loadLessBtn.classList.remove('hidden');
-        });
-
-        loadLessBtn.addEventListener('click', function () {
-            banners.forEach((banner, index) => {
-                if (index >= 6) {
-                    banner.classList.add('hidden');
+                currentlyVisible += hiddenBanners.length;
+                if (currentlyVisible >= banners.length) {
+                    loadMoreBtn.style.display = 'none';
                 }
+                loadLessBtn.classList.remove('hidden');
             });
-            currentlyVisible = 6; 
-            loadMoreBtn.style.display = 'inline-block';
-            loadLessBtn.classList.add('hidden');
+
+            loadLessBtn.addEventListener('click', function () {
+                banners.forEach((banner, index) => {
+                    if (index >= 6) {
+                        banner.classList.add('hidden');
+                    }
+                });
+                currentlyVisible = 6; 
+                loadMoreBtn.style.display = 'inline-block';
+                loadLessBtn.classList.add('hidden');
+            });
         });
-    });
     </script>
 
     <script>
