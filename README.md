@@ -1,4 +1,4 @@
-Website event registration "eventure" yang dibuat oleh 4 anggota kelompok kami:
+Website event registration "eventure" yang dibuat oleh 4 anggota kelompok No. 3 kami:
 
 arrayyan123 AS Muhammad Arrayyan Aprilyanto
 
