@@ -231,7 +231,10 @@ if ($show_checkmark) {
             if (document.getElementById('name') != '<?php echo htmlspecialchars($user_info['name']); ?>' || document.getElementById('email') != '<?php echo htmlspecialchars($user_info['email']); ?>'){
                 this.submit();
             }
-            const canvas = cropper.getCroppedCanvas();
+            const canvas = cropper.getCroppedCanvas({
+                width: 200,
+                height: 200
+            });
             if (canvas) {
                 croppedImageInput.value = canvas.toDataURL();
             } 
