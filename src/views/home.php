@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL); 
+error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 session_start();
@@ -8,13 +8,14 @@ require_once __DIR__ . '/../../models/user.php';
 require_once __DIR__ . '/../../models/db.php';
 
 $event = new Event();
-$events = $event->getAllEvents(); 
+$events = $event->getAllEvents();
 
 $database = new Database();
 $db = $database->getConnection();
 $user = new User($db);
 
-function getStatusClass($status) {
+function getStatusClass($status)
+{
     switch ($status) {
         case 'open':
             return 'blue-500';
@@ -37,7 +38,7 @@ if (!empty($search)) {
     $stmt->execute();
     $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
-    $events = $event->getAllEvents(); 
+    $events = $event->getAllEvents();
 }
 
 $query = "SELECT * FROM banner_promote";
@@ -48,20 +49,32 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Event Registration</title>
     <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/6.5.95/css/materialdesignicons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <link rel="stylesheet" href="../css/output.css?v=<?php echo time(); ?>">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        .banner-item {
+            transform: translateY(0px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .banner-item.visible {
+            opacity: 1;
+            transform: translateY(20px);
+        }
+
         swiper-container {
-        width: 100%;
-        height: auto;
+            width: 100%;
+            height: auto;
         }
 
         @media only screen and (min-width: 768px) {
@@ -71,110 +84,41 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         swiper-slide {
-        text-align: center;
-        font-size: 18px;
-        background: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
 
         .hidden {
             display: none;
         }
-
-
     </style>
 </head>
+
 <body>
     <div class="bg-gray-100">
         <div class="h-screen flex overflow-hidden bg-gray-200">
             <!-- Content -->
             <div class="flex-1 flex flex-col overflow-hidden">
                 <!-- Navbar -->
-                <nav class="sm:bg-none bg-white absolute sm:border-none z-40 w-full px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800 shadow">
-                    <div class="container flex flex-wrap justify-between items-center mx-auto">
-                        <a href="home.php" class="flex items-center">
-                            <div class="rounded-full h-auto w-auto mx-2 bg-white">
-                                <img src="../../assets/images/logo_eventure.png" class="w-[90px] h-[90px]" alt="">
-                            </div>
-                            <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-                                Eventure
-                            </span>
-                        </a>
-                        <div class="flex items-center">
-                            <button
-                                id="menu-toggle"
-                                type="button"
-                                class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 lg:hidden transition-transform duration-300 ease-in-out"
-                            >
-                                <span class="sr-only">Open main menu</span>
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 6h16M4 12h16m-7 6h7"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div
-                            class="hidden w-full lg:block lg:w-auto transition-all duration-500 ease-in-out transform origin-top"
-                            id="mobile-menu"
-                        >
-                            <ul class="flex flex-col mt-4 dark:text-white text-black lg:flex-row lg:space-x-8 lg:mt-0 lg:items-center lg:text-sm md:font-medium gap-[20px]">
-                                <form method="GET" action="home.php" class="flex flex-row text-black gap-2 items-center lg:w-auto w-full">
-                                    <input type="text" name="search" placeholder="Search events..." class="border px-4 py-2 rounded-lg w-full sm:w-1/2 lg:w-2/3" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Search</button>
-                                </form>
-                                <?php if (isset($_SESSION['user_id'])): ?>
-                                    <li>
-                                        <a href="#landing-page" class="block hover:text-indigo-400" aria-current="page">Home</a>
-                                    </li>
-                                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'organizer'): ?>
-                                        <li class=""><a href="dashboard.php" class="block hover:text-indigo-400">Dashboard</a></li>
-                                    <?php endif; ?>
-                                    <li class=""><a href="profile.php" class="block hover:text-indigo-400">Profile</a></li>
-                                    <li class=""><a href="../../controllers/auth_controller.php?logout=true" class="block hover:text-indigo-400">Logout</a></li>
-                                <?php else: ?>
-                                    <li class=""><a href="login.php" class="block hover:text-indigo-400">Login</a></li>
-                                    <li class=""><a href="register.php" class="block hover:text-indigo-400">Register</a></li>
-                                <?php endif; ?>
-                                <div class="user-info flex flex-row items-center gap-5">
-                                    <?php if (isset($_SESSION['user_id'])): ?>
-                                        <?php 
-                                            $userInfo = $user->getUserById($_SESSION['user_id']);
-                                            $profilePic = isset($userInfo['profile_pic']) ? htmlspecialchars($userInfo['profile_pic']) : 'default.png';
-                                            $userName = isset($userInfo['name']) ? htmlspecialchars($userInfo['name']) : 'Guest';
-                                        ?>
-                                        <img src="../../uploads/profilepic/<?php echo $profilePic; ?>?<?php echo time(); ?>" alt="Profile Picture" width="40" height="40" class="rounded-full mb-2">
-                                        <span><?php echo $userName; ?></span>
-                                    <?php else: ?>
-                                        <img src="../../uploads/profilepic/default.png" alt="Profile Picture" width="40" height="40" class="rounded-full mb-2">
-                                        <span>Guest</span>
-                                    <?php endif; ?>
-                                </div>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-                <!--Navbar end-->
+                <?php require_once('navbar.php') ?>
                 <!-- Content Body -->
-                <div class="flex-1 overflow-auto m">
+                <div class="flex-1 overflow-auto">
                     <div id="landing-page" class="relative bg-white h-screen w-screen">
                         <div class="absolute inset-0 bg-gray-600 bg-opacity-60 z-10"></div>
                         <img src="../../assets/images/umn_build.jpg" class="absolute inset-0 h-full w-full object-cover z-0" alt="UMN Building">
-                        
+
                         <div class="absolute inset-0 flex flex-col items-center justify-center z-20">
                             <h1 class="text-white text-4xl font-bold opacity-0 transition-opacity duration-700" id="overlay-title">Eventure</h1>
                             <p class="lg:w-2/3 mx-auto opacity-0 transition-opacity duration-700 text-white leading-relaxed text-center" id="overlay-text">Gabungan dari "event" dan "adventure," menggambarkan perjalanan menyenangkan dan penuh pengalaman dalam mengelola atau menghadiri acara.</p>
                         </div>
                     </div>
                     <!-- Gallery banner dengan animasi sebagai backdrop -->
-                    <section id="about-eventure" class="text-gray-600 transition-all ease-in-out duration-200 body-font relative overflow-hidden"> 
+                    <section id="about-eventure" class="text-gray-600 transition-all ease-in-out duration-200 body-font relative overflow-hidden">
                         <div class="container px-5 py-24 mx-auto">
                             <div class="flex flex-col text-center w-full mb-20">
                                 <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Eventure</h1>
@@ -182,18 +126,17 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <!-- Section animasi sebagai backdrop -->
                             <div class="function-based-values-demo absolute top-1/2 inset-0 z-0 opacity-35">
-                                <?php 
+                                <?php
                                 $colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500'];
-                                $someValue = 100; 
-                                foreach ($banners as $index => $banner): 
+                                $someValue = 100;
+                                foreach ($banners as $index => $banner):
                                     $imagePath = "../../uploads/banner_carousel/" . htmlspecialchars($banner['image_path']);
                                 ?>
-                                    <div 
-                                        class="el w-12 h-12 <?php echo $colors[$index % count($colors)]; ?> m-1 rounded-md" 
-                                        data-x="<?php echo $someValue; ?>" 
+                                    <div
+                                        class="el w-12 h-12 <?php echo $colors[$index % count($colors)]; ?> m-1 rounded-md"
+                                        data-x="<?php echo $someValue; ?>"
                                         data-color="<?php echo $colors[$index % count($colors)]; ?>"
-                                        style="background-size: cover;"
-                                    ></div>
+                                        style="background-size: cover;"></div>
                                     <?php $someValue += 120;  ?>
                                 <?php endforeach; ?>
                             </div>
@@ -255,7 +198,7 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </div>
                                     <div class="mt-4">
                                         <h2 class="font-medium text-base md:text-lg text-gray-800 line-clamp-1" title="New York">
-                                            <?php echo htmlspecialchars($event['event_name']);?>
+                                            <?php echo htmlspecialchars($event['event_name']); ?>
                                         </h2>
                                         <p class="mt-2 text-sm text-gray-800 line-clamp-1" title="New York, NY 10004, United States">
                                             <?php echo htmlspecialchars($event['location']); ?>
@@ -298,11 +241,11 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <section class="text-gray-600 body-font">
                         <div class="container px-5 py-24 mx-auto">
                             <div class="flex flex-wrap w-full mb-20">
-                            <div class="lg:w-1/2 w-full mb-6 lg:mb-0">
-                                <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">Our Team Member</h1>
-                                <div class="h-1 w-20 bg-indigo-500 rounded"></div>
-                            </div>
-                            <p class="lg:w-1/2 w-full leading-relaxed text-gray-500">Kami dari kelompok 3 Web Programming membuat sebuah aplikasi yang inovatif, user friendly, dan memiliki keunggulan fitur lainnya</p>
+                                <div class="lg:w-1/2 w-full mb-6 lg:mb-0">
+                                    <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">Our Team Member</h1>
+                                    <div class="h-1 w-20 bg-indigo-500 rounded"></div>
+                                </div>
+                                <p class="lg:w-1/2 w-full leading-relaxed text-gray-500">Kami dari kelompok 3 Web Programming membuat sebuah aplikasi yang inovatif, user friendly, dan memiliki keunggulan fitur lainnya</p>
                             </div>
                             <div class="flex flex-wrap -m-4">
                                 <div class="xl:w-1/4 md:w-1/2 p-4">
@@ -348,10 +291,10 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <h1 class="max-w-lg text-xl font-semibold tracking-tight text-gray-800 xl:text-2xl dark:text-white">Search Events</h1>
                                     <form method="GET" action="home.php">
                                         <div class="flex flex-col mx-auto mt-6 space-y-3 md:space-y-0 md:flex-row">
-                                            <input name="search" 
-                                            value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
-                                            type="text" class="px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300" placeholder="Search Event Here" />
-                                    
+                                            <input name="search"
+                                                value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
+                                                type="text" class="px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300" placeholder="Search Event Here" />
+
                                             <button type="submit" class="w-full px-6 py-2.5 text-sm font-medium tracking-wider text-white transition-colors duration-300 transform md:w-auto md:mx-4 focus:outline-none bg-gray-800 rounded-lg hover:bg-gray-700 focus:ring focus:ring-gray-300 focus:ring-opacity-80">
                                                 Search
                                             </button>
@@ -401,15 +344,23 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
             scale: function(el, i, l) {
                 return (l - i) + 0.25;
             },
-            rotate: function() { return anime.random(-360, 360); },
-            borderRadius: function() { return ['50%', anime.random(10, 35) + '%']; },
-            duration: function() { return anime.random(1200, 1800); },
-            delay: function() { return anime.random(0, 400); },
+            rotate: function() {
+                return anime.random(-360, 360);
+            },
+            borderRadius: function() {
+                return ['50%', anime.random(10, 35) + '%'];
+            },
+            duration: function() {
+                return anime.random(1200, 1800);
+            },
+            delay: function() {
+                return anime.random(0, 400);
+            },
             backgroundColor: function(el) {
                 return el.getAttribute('data-color');
             },
             backgroundImage: function(el) {
-                return 'url("' + el.getAttribute('data-image') + '")'; 
+                return 'url("' + el.getAttribute('data-image') + '")';
             },
             direction: 'alternate',
             loop: true,
@@ -419,49 +370,74 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }, 2000);
             }
         });
-
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const loadMoreBtn = document.getElementById('loadMoreBtn');
-            const loadLessBtn = document.getElementById('loadLessBtn');
-            const banners = document.querySelectorAll('.banner-item');
-            let currentlyVisible = 6;
+        document.addEventListener("DOMContentLoaded", function() {
+            const loadMoreBtn = document.getElementById("loadMoreBtn");
+            const loadLessBtn = document.getElementById("loadLessBtn");
+            const bannerItems = document.querySelectorAll(".banner-item");
 
-            loadMoreBtn.addEventListener('click', function () {
-                const hiddenBanners = Array.from(banners).slice(currentlyVisible, currentlyVisible + 6);
-                
-                hiddenBanners.forEach(banner => {
-                    banner.classList.remove('hidden');
-                });
+            let itemsToShow = 6; // Initial number of items to show
 
-                currentlyVisible += hiddenBanners.length;
-                if (currentlyVisible >= banners.length) {
-                    loadMoreBtn.style.display = 'none';
-                }
-                loadLessBtn.classList.remove('hidden');
-            });
+            // Show more items with smoother animation
+            loadMoreBtn.addEventListener("click", () => {
+                let shownItems = 0;
 
-            loadLessBtn.addEventListener('click', function () {
-                banners.forEach((banner, index) => {
-                    if (index >= 6) {
-                        banner.classList.add('hidden');
+                bannerItems.forEach((item, index) => {
+                    if (index >= itemsToShow && item.classList.contains("hidden")) {
+                        item.classList.remove("hidden");
+                        setTimeout(() => {
+                            item.classList.add("visible");
+                            item.classList.remove("opacity-0", "translate-y-6"); // Reset for next reveal
+                        }, 50); // slight delay to trigger animation
+                        shownItems++;
                     }
                 });
-                currentlyVisible = 6; 
-                loadMoreBtn.style.display = 'inline-block';
-                loadLessBtn.classList.add('hidden');
+
+                // Update the number of items shown
+                itemsToShow += shownItems;
+
+                // Hide load more button if all items are shown
+                if (itemsToShow >= bannerItems.length) {
+                    loadMoreBtn.classList.add("hidden");
+                }
+
+                loadLessBtn.classList.remove("hidden");
+            });
+
+            // Hide extra items with smoother animation
+            loadLessBtn.addEventListener("click", function() {
+                const newItemsToShow = Math.max(6, itemsToShow - 6); // Set to show fewer items but at least 6
+
+                bannerItems.forEach((item, index) => {
+                    if (index >= newItemsToShow && item.classList.contains("visible")) {
+                        item.classList.remove("visible");
+                        item.classList.add("opacity-0", "translate-y-6"); // Apply hide animation
+
+                        setTimeout(() => {
+                            item.classList.add("hidden");
+                        }, 500); // Delay to allow for fade-out animation
+                    }
+                });
+
+                itemsToShow = newItemsToShow; // Update the items to show
+
+                loadMoreBtn.classList.remove("hidden");
+                if (itemsToShow <= 6) {
+                    loadLessBtn.classList.add("hidden");
+                }
             });
         });
     </script>
 
+
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const links = document.querySelectorAll('a[href^="#"]');
 
             links.forEach(link => {
-                link.addEventListener("click", function (e) {
-                    e.preventDefault(); 
+                link.addEventListener("click", function(e) {
+                    e.preventDefault();
                     const targetId = this.getAttribute("href");
                     const targetElement = document.querySelector(targetId);
 
@@ -477,8 +453,8 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script>
         const titleElement = document.getElementById('overlay-title');
         const textElement = document.getElementById('overlay-text');
-        let hasScrolledToAboutEventure = false; 
-        let isSearching = false; 
+        let hasScrolledToAboutEventure = false;
+        let isSearching = false;
 
         window.onload = () => {
             titleElement.classList.remove('opacity-0');
@@ -489,7 +465,9 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (!hasScrolledToAboutEventure && !isSearching) {
                     const aboutEventure = document.getElementById('about-eventure');
                     if (aboutEventure) {
-                        aboutEventure.scrollIntoView({ behavior: 'smooth' });
+                        aboutEventure.scrollIntoView({
+                            behavior: 'smooth'
+                        });
                         hasScrolledToAboutEventure = true;
                     }
                 }
@@ -499,10 +477,12 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('search') && urlParams.get('search').trim() !== '') {
-                isSearching = true; 
+                isSearching = true;
                 const contentEvent = document.getElementById('content-event');
                 if (contentEvent) {
-                    contentEvent.scrollIntoView({ behavior: 'smooth' });
+                    contentEvent.scrollIntoView({
+                        behavior: 'smooth'
+                    });
                 }
             }
         });
@@ -511,21 +491,21 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
 
-        menuToggle.addEventListener('click', function () {
+        menuToggle.addEventListener('click', function() {
             mobileMenu.classList.toggle('hidden');
             mobileMenu.classList.toggle('opacity-0');
             mobileMenu.classList.toggle('scale-y-0');
 
             setTimeout(() => {
-                mobileMenu.classList.toggle('opacity-100'); 
-                mobileMenu.classList.toggle('scale-y-100'); 
+                mobileMenu.classList.toggle('opacity-100');
+                mobileMenu.classList.toggle('scale-y-100');
             }, 10);
         });
         let startTime = Date.now();
 
         function logActivity() {
             let endTime = Date.now();
-            let timeSpent = Math.round((endTime - startTime) / 1000); 
+            let timeSpent = Math.round((endTime - startTime) / 1000);
 
             let xhr = new XMLHttpRequest();
             xhr.open('POST', 'log_activity.php', true);
@@ -537,5 +517,5 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
 </body>
+
 </html>
- 

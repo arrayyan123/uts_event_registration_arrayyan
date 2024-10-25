@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $file_name = $user_info['profile_pic']; 
-
+    
     if (isset($_POST['croppedImage'])) {
         $data = $_POST['croppedImage'];
 
@@ -41,8 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif (strpos($data, 'data:image/png') === 0) {
             $ext = 'png';
             $data = str_replace('data:image/png;base64,', '', $data);
+        } elseif (empty($data) && !empty($name) || !empty($email)) {
+            $user->updateProfile($_SESSION['user_id'], $name, $email, $file_name);
+            $_SESSION['profile_updated'] = true;
+            header('Location: profile.php');
+            exit();
         } else {
-            die('Unsupported image type.');
+            die('Unsupported image types');
         }
 
         $data = str_replace(' ', '+', $data);
@@ -162,6 +167,7 @@ if ($show_checkmark) {
                 <canvas id="canvas" class="hidden"></canvas>
             </div>
             <input type="hidden" name="croppedImage" id="croppedImage">
+            <span class="text-red-600">*You must change the profile picture before update your profile description</span>
             <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Update Profile</button>
         </form>
 
@@ -222,10 +228,13 @@ if ($show_checkmark) {
 
         document.getElementById('profileForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            if (document.getElementById('name') != '<?php echo htmlspecialchars($user_info['name']); ?>' || document.getElementById('email') != '<?php echo htmlspecialchars($user_info['email']); ?>'){
+                this.submit();
+            }
             const canvas = cropper.getCroppedCanvas();
             if (canvas) {
                 croppedImageInput.value = canvas.toDataURL();
-            }
+            } 
             this.submit();
         });
     </script>

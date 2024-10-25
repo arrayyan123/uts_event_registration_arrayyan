@@ -4,6 +4,7 @@ import forms from '@tailwindcss/forms';
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   mode: 'jit',
+  darkMode: 'class',
   content: [
     "./src/views/**/*.php",
     "./src/views/**/*.html",
@@ -17,7 +18,6 @@ module.exports = {
     },
 },
   plugins: [
-    forms,
+    forms
   ],
 }
-
