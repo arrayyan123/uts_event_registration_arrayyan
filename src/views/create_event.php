@@ -193,70 +193,71 @@ if (isset($_POST['register_event'])) {
     </aside>
     <div class="p-4 sm:ml-64">
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-            <!--konten di dalam sini -->
-            <form action="" method="POST" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="event_name" class="form-label">Event Name:</label>
-                    <input type="text" id="event_name" name="event_name" class="form-control" required>
+            <!-- Form Section -->
+            <form action="" method="POST" enctype="multipart/form-data" class="space-y-4">
+                <div>
+                    <label for="event_name" class="block text-sm font-medium text-gray-700">Event Name:</label>
+                    <input type="text" id="event_name" name="event_name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                 </div>
-                <div class="mb-3">
-                    <label for="event_date" class="form-label">Event Date:</label>
-                    <input type="date" id="event_date" name="event_date" class="form-control" required>
+                <div>
+                    <label for="event_date" class="block text-sm font-medium text-gray-700">Event Date:</label>
+                    <input type="date" id="event_date" name="event_date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                 </div>
-                <div class="mb-3">
-                    <label for="event_time" class="form-label">Event Time:</label>
-                    <input type="time" id="event_time" name="event_time" class="form-control" required>
+                <div>
+                    <label for="event_time" class="block text-sm font-medium text-gray-700">Event Time:</label>
+                    <input type="time" id="event_time" name="event_time" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                 </div>
-                <div class="mb-3">
-                    <label for="start_date">Start Date:</label>
-                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                <div>
+                    <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date:</label>
+                    <input type="date" id="start_date" name="start_date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                 </div>
-                <div class="mb-3">
-                    <label for="end_date">End Date:</label>
-                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                <div>
+                    <label for="end_date" class="block text-sm font-medium text-gray-700">End Date:</label>
+                    <input type="date" id="end_date" name="end_date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                 </div>
-                <div class="mb-3">
-                    <label for="price">Price (IDR):</label>
-                    <input type="number" step="0.01" id="price" name="price" class="form-control" required>
+                <div>
+                    <label for="price" class="block text-sm font-medium text-gray-700">Price (IDR):</label>
+                    <input type="number" step="0.01" id="price" name="price" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                 </div>
-                <div class="mb-3">
-                    <label for="location" class="form-label">Location:</label>
-                    <input type="text" id="location" name="location" class="form-control" required>
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-700">Location:</label>
+                    <input type="text" id="location" name="location" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                 </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description:</label>
-                    <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700">Description:</label>
+                    <textarea id="description" name="description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="4" required></textarea>
                 </div>
-                <div class="mb-3">
-                    <label for="max_participants" class="form-label">Max Participants:</label>
-                    <input type="number" id="max_participants" name="max_participants" class="form-control" required>
+                <div>
+                    <label for="max_participants" class="block text-sm font-medium text-gray-700">Max Participants:</label>
+                    <input type="number" id="max_participants" name="max_participants" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                 </div>
-                <div class="mb-3">
-                    <label for="banner" class="form-label">Banner Image:</label>
-                    <input type="file" id="banner" name="banner" class="form-control" accept="image/*" required>
+                <div>
+                    <label for="banner" class="block text-sm font-medium text-gray-700">Banner Image:</label>
+                    <input type="file" id="banner" name="banner" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" accept="image/*" required>
                 </div>
-                <button type="submit" name="create_event" class="btn btn-primary">Create Event</button>
+                <button type="submit" name="create_event" class="w-full mt-4 py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Create Event</button>
             </form>
 
-            <h2 class="mt-5">Available Events</h2>
-            <ul class="list-group">
+            <h2 class="mt-5 text-lg font-semibold">Available Events</h2>
+            <ul class="mt-3 space-y-2">
                 <?php
                 $events = $event->getAllEvents(); 
                 foreach ($events as $event_item): ?>
-                    <li class="list-group-item">
-                        <h3><?php echo htmlspecialchars($event_item['event_name']); ?></h3>
+                    <li class="p-4 border rounded-md bg-white shadow-md">
+                        <h3 class="text-lg font-bold"><?php echo htmlspecialchars($event_item['event_name']); ?></h3>
                         <form action="" method="POST" style="display:inline;">
                             <input type="hidden" name="event_id" value="<?php echo htmlspecialchars($event_item['id']); ?>">
-                            <button type="submit" name="register_event" class="btn btn-success">Register</button>
+                            <button type="submit" name="register_event" class="mt-2 py-1 px-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">Register</button>
                         </form>
                     </li>
                 <?php endforeach; ?>
             </ul>
-            <button class="p-4 text-white text-center rounded-xl bg-red-600">
-                <a href="home.php">back to home</a>
+            <button class="mt-5 py-2 px-4 text-white text-center rounded-xl bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+                <a href="home.php">Back to Home</a>
             </button>
         </div>
     </div>
+
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

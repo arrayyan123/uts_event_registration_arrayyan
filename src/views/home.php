@@ -44,7 +44,6 @@ $query = "SELECT * FROM banner_promote";
 $stmt = $db->prepare($query);
 $stmt->execute();
 $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -53,6 +52,7 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Event Registration</title>
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/6.5.95/css/materialdesignicons.min.css">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -79,6 +79,11 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
         align-items: center;
         overflow: hidden;
         }
+
+        .hidden {
+            display: none;
+        }
+
 
     </style>
 </head>
@@ -162,19 +167,20 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="absolute inset-0 bg-gray-600 bg-opacity-60 z-10"></div>
                         <img src="../../assets/images/umn_build.jpg" class="absolute inset-0 h-full w-full object-cover z-0" alt="UMN Building">
                         
-                        <div class="absolute inset-0 flex items-center justify-center z-20">
-                            <h1 class="text-white text-4xl font-bold opacity-0 transition-opacity duration-700" id="overlay-text">Eventure</h1>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center z-20">
+                            <h1 class="text-white text-4xl font-bold opacity-0 transition-opacity duration-700" id="overlay-title">Eventure</h1>
+                            <p class="lg:w-2/3 mx-auto opacity-0 transition-opacity duration-700 text-white leading-relaxed text-center" id="overlay-text">Gabungan dari "event" dan "adventure," menggambarkan perjalanan menyenangkan dan penuh pengalaman dalam mengelola atau menghadiri acara.</p>
                         </div>
                     </div>
                     <!-- Gallery banner dengan animasi sebagai backdrop -->
-                    <section id="about-eventure" class="text-gray-600 body-font relative overflow-hidden"> <!-- Tetap menggunakan relative -->
+                    <section id="about-eventure" class="text-gray-600 body-font relative overflow-hidden"> 
                         <div class="container px-5 py-24 mx-auto">
                             <div class="flex flex-col text-center w-full mb-20">
                                 <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Eventure</h1>
                                 <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Gabungan dari "event" dan "adventure," menggambarkan perjalanan menyenangkan dan penuh pengalaman dalam mengelola atau menghadiri acara.</p>
                             </div>
                             <!-- Section animasi sebagai backdrop -->
-                            <div class="function-based-values-demo absolute top-1/2 inset-0 z-0 opacity-35"> <!-- Tetapkan absolute agar berada di belakang -->
+                            <div class="function-based-values-demo absolute top-1/2 inset-0 z-0 opacity-35">
                                 <?php 
                                 $colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500'];
                                 $someValue = 100; 
@@ -190,10 +196,11 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <?php $someValue += 120;  ?>
                                 <?php endforeach; ?>
                             </div>
+                            <?php $totalBanners = count($banners); ?>
                             <!-- Konten galeri banner -->
-                            <div class="flex flex-wrap -m-4 relative z-10"> <!-- Tambahkan z-10 agar tetap di atas animasi -->
-                                <?php foreach ($banners as $banner): ?>
-                                    <div class="w-full lg:w-1/3 sm:w-1/2 p-4">
+                            <div id="banner-gallery" class="flex flex-wrap -m-4 relative z-10">
+                                <?php foreach ($banners as $index => $banner): ?>
+                                    <div class="w-full lg:w-1/3 sm:w-1/2 p-4 banner-item <?php echo ($index >= 6) ? 'hidden' : ''; ?>">
                                         <div class="flex relative">
                                             <img alt="gallery" class="absolute inset-0 w-full h-full object-cover object-center" src="../../uploads/banner_carousel/<?php echo htmlspecialchars($banner['image_path']); ?>">
                                             <div class="px-8 py-10 relative z-10 w-full border-4 border-gray-200 bg-white opacity-0 hover:opacity-100">
@@ -203,6 +210,10 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
+                            </div>
+                            <div class="text-center relative z-30 mt-6">
+                                <button id="loadMoreBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Load More</button>
+                                <button id="loadLessBtn" class="bg-gray-500 text-white px-4 py-2 rounded-lg hidden">Load Less</button>
                             </div>
                         </div>
                     </section>
@@ -283,142 +294,51 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         <?php endforeach; ?>
                     </div>
-                    <div class="flex items-center mt-5 justify-center min-h-screen bg-white py-48">
-                        <div class="flex flex-col">
-                            <div class="flex flex-col mt-0">
-                                <div class="container max-w-7xl px-4">
-                                    <div class="flex flex-wrap justify-center text-center mb-24">
-                                        <div class="w-full lg:w-6/12 px-4">
-                                            <h1 class="text-gray-900 text-4xl font-bold mb-8">
-                                                Meet the Team
-                                            </h1>
-                                            <p class="text-gray-700 text-lg font-light">
-                                                With over 100 years of combined experience, we've got a well-seasoned team at the helm.
-                                            </p>
-                                        </div>
+                    <section class="text-gray-600 body-font">
+                        <div class="container px-5 py-24 mx-auto">
+                            <div class="flex flex-wrap w-full mb-20">
+                            <div class="lg:w-1/2 w-full mb-6 lg:mb-0">
+                                <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">Our Team Member</h1>
+                                <div class="h-1 w-20 bg-indigo-500 rounded"></div>
+                            </div>
+                            <p class="lg:w-1/2 w-full leading-relaxed text-gray-500">Kami dari kelompok 3 Web Programming membuat sebuah aplikasi yang inovatif, user friendly, dan memiliki keunggulan fitur lainnya</p>
+                            </div>
+                            <div class="flex flex-wrap -m-4">
+                                <div class="xl:w-1/4 md:w-1/2 p-4">
+                                    <div class="bg-gray-100 h-full p-6 rounded-lg">
+                                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="../../assets/images/arrayyan.JPG" alt="content">
+                                        <h3 class="tracking-widest text-indigo-500 text-xs font-medium title-font">Full Stack</h3>
+                                        <h2 class="text-lg text-gray-900 font-medium title-font mb-4">Muhammad Arrayyan Aprilyanto</h2>
+                                        <p class="leading-relaxed text-base">Seorang pengembang full stack memiliki kemampuan untuk mengerjakan semua lapisan aplikasi, baik sisi front end (antarmuka pengguna) maupun back end (server, basis data, dan logika aplikasi). Mereka dapat mengembangkan aplikasi secara menyeluruh dari awal hingga akhir.</p>
                                     </div>
-
-                                    <div class="flex flex-wrap">
-                                        <div class="w-full md:w-6/12 lg:w-3/12 mb-6 px-6 sm:px-6 lg:px-4">
-                                            <div class="flex flex-col">
-                                                <a href="#" class="mx-auto">
-                                                    <img class="rounded-2xl drop-shadow-md hover:drop-shadow-xl transition-all duration-200 delay-100"
-                                                        src="https://images.unsplash.com/photo-1634926878768-2a5b3c42f139?fit=clamp&w=400&h=400&q=80">
-                                                </a>
-                                                <div class="text-center mt-6">
-                                                    <h1 class="text-gray-900 text-xl font-bold mb-1">
-                                                        Tranter Jaskulski
-                                                    </h1>
-                                                    <div class="text-gray-700 font-light mb-2">
-                                                        Founder & Specialist
-                                                    </div>
-                                                    <div class="flex items-center justify-center opacity-50 hover:opacity-100
-                                                    transition-opacity duration-300">
-                                                        <a href="#" class="flex rounded-full hover:bg-indigo-50 h-10 w-10">
-                                                            <i class="mdi mdi-linkedin text-indigo-500 mx-auto mt-2"></i>
-                                                        </a>
-                                                        <a href="#" class="flex rounded-full hover:bg-blue-50 h-10 w-10">
-                                                            <i class="mdi mdi-twitter text-blue-300 mx-auto mt-2"></i>
-                                                        </a>
-                                                        <a href="#" class="flex rounded-full hover:bg-orange-50 h-10 w-10">
-                                                            <i class="mdi mdi-instagram text-orange-400 mx-auto mt-2"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="w-full md:w-6/12 lg:w-3/12 mb-6 px-6 sm:px-6 lg:px-4">
-                                            <div class="flex flex-col">
-                                                <a href="#" class="mx-auto">
-                                                    <img class="rounded-2xl drop-shadow-md hover:drop-shadow-xl transition-all duration-200 delay-100"
-                                                        src="https://images.unsplash.com/photo-1634896941598-b6b500a502a7?fit=clamp&w=400&h=400&q=80">
-                                                </a>
-                                                <div class="text-center mt-6">
-                                                    <h1 class="text-gray-900 text-xl font-bold mb-1">
-                                                        Denice Jagna
-                                                    </h1>
-                                                    <div class="text-gray-700 font-light mb-2">
-                                                        Tired & M. Specialist
-                                                    </div>
-                                                    <div class="flex items-center justify-center opacity-50 hover:opacity-100
-                                                    transition-opacity duration-300">
-                                                        <a href="#" class="flex rounded-full hover:bg-indigo-50 h-10 w-10">
-                                                            <i class="mdi mdi-linkedin text-indigo-700 mx-auto mt-2"></i>
-                                                        </a>
-                                                        <a href="#" class="flex rounded-full hover:bg-blue-50 h-10 w-10">
-                                                            <i class="mdi mdi-twitter text-blue-400 mx-auto mt-2"></i>
-                                                        </a>
-                                                        <a href="#" class="flex rounded-full hover:bg-orange-50 h-10 w-10">
-                                                            <i class="mdi mdi-instagram text-orange-400 mx-auto mt-2"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="w-full md:w-6/12 lg:w-3/12 mb-6 px-6 sm:px-6 lg:px-4">
-                                            <div class="flex flex-col">
-                                                <a href="#" class="mx-auto">
-                                                    <img class="rounded-2xl drop-shadow-md hover:drop-shadow-xl transition-all duration-200 delay-100"
-                                                        src="https://images.unsplash.com/photo-1634193295627-1cdddf751ebf?fit=clamp&w=400&h=400&q=80">
-                                                </a>
-                                                <div class="text-center mt-6">
-                                                    <h1 class="text-gray-900 text-xl font-bold mb-1">
-                                                        Kenji Milton
-                                                    </h1>
-                                                    <div class="text-gray-700 font-light mb-2">
-                                                        Team Member
-                                                    </div>
-                                                    <div class="flex items-center justify-center opacity-50 hover:opacity-100
-                                                    transition-opacity duration-300">
-                                                        <a href="#" class="flex rounded-full hover:bg-indigo-50 h-10 w-10">
-                                                            <i class="mdi mdi-linkedin text-indigo-700 mx-auto mt-2"></i>
-                                                        </a>
-                                                        <a href="#" class="flex rounded-full hover:bg-blue-50 h-10 w-10">
-                                                            <i class="mdi mdi-twitter text-blue-400 mx-auto mt-2"></i>
-                                                        </a>
-                                                        <a href="#" class="flex rounded-full hover:bg-orange-50 h-10 w-10">
-                                                            <i class="mdi mdi-instagram text-orange-400 mx-auto mt-2"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="w-full md:w-6/12 lg:w-3/12 mb-6 px-6 sm:px-6 lg:px-4">
-                                            <div class="flex flex-col">
-                                                <a href="#" class="mx-auto">
-                                                    <img class="rounded-2xl drop-shadow-md hover:drop-shadow-xl transition-all duration-200 delay-100"
-                                                        src="https://images.unsplash.com/photo-1635003913011-95971abba560?fit=clamp&w=400&h=400&q=80">
-                                                </a>
-                                                <div class="text-center mt-6">
-                                                    <h1 class="text-gray-900 text-xl font-bold mb-1">
-                                                        Doesn't matter
-                                                    </h1>
-                                                    <div class="text-gray-700 font-light mb-2">
-                                                        Will be fired
-                                                    </div>
-                                                    <div class="flex items-center justify-center opacity-50 hover:opacity-100
-                                                    transition-opacity duration-300">
-                                                        <a href="#" class="flex rounded-full hover:bg-indigo-50 h-10 w-10">
-                                                            <i class="mdi mdi-linkedin text-indigo-700 mx-auto mt-2"></i>
-                                                        </a>
-                                                        <a href="#" class="flex rounded-full hover:bg-blue-50 h-10 w-10">
-                                                            <i class="mdi mdi-twitter text-blue-400 mx-auto mt-2"></i>
-                                                        </a>
-                                                        <a href="#" class="flex rounded-full hover:bg-orange-50 h-10 w-10">
-                                                            <i class="mdi mdi-instagram text-orange-400 mx-auto mt-2"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                </div>
+                                <div class="xl:w-1/4 md:w-1/2 p-4">
+                                    <div class="bg-gray-100 h-full p-6 rounded-lg">
+                                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="../../assets/images/savero.JPG" alt="content">
+                                        <h3 class="tracking-widest text-indigo-500 text-xs font-medium title-font">Semi-Full Stack</h3>
+                                        <h2 class="text-lg text-gray-900 font-medium title-font mb-4">Savero Madajaya</h2>
+                                        <p class="leading-relaxed text-base">Istilah ini biasanya merujuk pada pengembang yang memiliki keterampilan di kedua sisi (front end dan back end) tetapi mungkin tidak sepenuhnya ahli di salah satu sisi. Mereka dapat menangani sebagian besar tugas, tetapi mungkin memerlukan bantuan untuk tugas yang lebih kompleks di salah satu sisi.</p>
+                                    </div>
+                                </div>
+                                <div class="xl:w-1/4 md:w-1/2 p-4">
+                                    <div class="bg-gray-100 h-full p-6 rounded-lg">
+                                        <img class="h-40 rounded w-full object-cover object-center mb-6" src="../../assets/images/aryasatya.JPG" alt="content">
+                                        <h3 class="tracking-widest text-indigo-500 text-xs font-medium title-font">Front-End Dev</h3>
+                                        <h2 class="text-lg text-gray-900 font-medium title-font mb-4">Muhammad Aryasatya Triputra</h2>
+                                        <p class="leading-relaxed text-base">Pengembang front end fokus pada pengembangan antarmuka pengguna dari aplikasi. Mereka bekerja dengan teknologi seperti HTML, CSS, dan JavaScript untuk menciptakan pengalaman pengguna yang menarik dan responsif.</p>
+                                    </div>
+                                </div>
+                                <div class="xl:w-1/4 md:w-1/2 p-4">
+                                    <div class="bg-gray-100 h-full p-6 rounded-lg">
+                                        <img class="h-40 rounded w-full object-cover object-top mb-6" src="../../assets/images/fahry.jpg" alt="content">
+                                        <h3 class="tracking-widest text-indigo-500 text-xs font-medium title-font">Front-End Dev</h3>
+                                        <h2 class="text-lg text-gray-900 font-medium title-font mb-4">Fahry Prathama</h2>
+                                        <p class="leading-relaxed text-base">Pengembang front end fokus pada pengembangan antarmuka pengguna dari aplikasi. Mereka bekerja dengan teknologi seperti HTML, CSS, dan JavaScript untuk menciptakan pengalaman pengguna yang menarik dan responsif.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
                     <!-- component -->
                     <footer class="bg-blue-100/80 font-sans dark:bg-gray-900">
                         <div class="container px-6 py-12 mx-auto">
@@ -459,7 +379,7 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </div>
                             </div>
                             <hr class="my-6 border-gray-200 md:my-8 dark:border-gray-700 h-2" />
-                            <p class="font-sans p-8 text-start md:text-center md:text-lg md:p-4">© 2024 Eventure Inc. All rights reserved.</p>
+                            <p class="font-sans p-8 text-start dark:text-white md:text-center md:text-lg md:p-4">© 2024 Eventure Inc. All rights reserved.</p>
                         </div>
                     </footer>
                 </div>
@@ -501,6 +421,40 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </script>
     <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const loadLessBtn = document.getElementById('loadLessBtn');
+        const banners = document.querySelectorAll('.banner-item');
+        let currentlyVisible = 6;
+
+        loadMoreBtn.addEventListener('click', function () {
+            const hiddenBanners = Array.from(banners).slice(currentlyVisible, currentlyVisible + 6);
+            
+            hiddenBanners.forEach(banner => {
+                banner.classList.remove('hidden');
+            });
+
+            currentlyVisible += hiddenBanners.length;
+            if (currentlyVisible >= banners.length) {
+                loadMoreBtn.style.display = 'none';
+            }
+            loadLessBtn.classList.remove('hidden');
+        });
+
+        loadLessBtn.addEventListener('click', function () {
+            banners.forEach((banner, index) => {
+                if (index >= 6) {
+                    banner.classList.add('hidden');
+                }
+            });
+            currentlyVisible = 6; 
+            loadMoreBtn.style.display = 'inline-block';
+            loadLessBtn.classList.add('hidden');
+        });
+    });
+    </script>
+
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             const links = document.querySelectorAll('a[href^="#"]');
 
@@ -520,14 +474,16 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
     </script>
     <script>
+        const titleElement = document.getElementById('overlay-title');
         const textElement = document.getElementById('overlay-text');
         let hasScrolledToAboutEventure = false; 
         let isSearching = false; 
 
         window.onload = () => {
+            titleElement.classList.remove('opacity-0');
+            titleElement.classList.add('opacity-100');
             textElement.classList.remove('opacity-0');
             textElement.classList.add('opacity-100');
-
             setTimeout(() => {
                 if (!hasScrolledToAboutEventure && !isSearching) {
                     const aboutEventure = document.getElementById('about-eventure');
@@ -542,7 +498,7 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('search') && urlParams.get('search').trim() !== '') {
-                isSearching = true; // Tandai bahwa pencarian sedang dilakukan
+                isSearching = true; 
                 const contentEvent = document.getElementById('content-event');
                 if (contentEvent) {
                     contentEvent.scrollIntoView({ behavior: 'smooth' });

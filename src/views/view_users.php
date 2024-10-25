@@ -43,7 +43,20 @@ $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (isset($_GET['action']) && $_GET['action'] === 'delete') {
-    # code...
+    $userId = $_GET['id'];
+
+    if (filter_var($userId, FILTER_VALIDATE_INT)) {
+        if ($user->deleteUserById($userId)) {
+            header("Location: view_users.php?message=User deleted successfully");
+            exit();
+        } else {
+            header("Location: view_users.php?error=Failed to delete user");
+            exit();
+        }
+    } else {
+        header("Location: view_users.php?error=Invalid user ID");
+        exit();
+    }
 }
 
 ?>
@@ -184,6 +197,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete') {
                                         <th class="border border-gray-300 px-4 py-2">Name</th>
                                         <th class="border border-gray-300 px-4 py-2">Email</th>
                                         <th class="border border-gray-300 px-4 py-2">Role</th>
+                                        <th class="border border-gray-300 px-4 py-2">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -193,6 +207,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete') {
                                             <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($user['name']); ?></td>
                                             <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($user['email']); ?></td>
                                             <td class="border border-gray-300 px-4 py-2"><?php echo htmlspecialchars($user['role']); ?></td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                <a href="?action=delete&id=<?php echo $user['id']; ?>" onclick="return confirm('Are you sure you want to delete this user?');" class="text-red-600 hover:text-red-900">Delete</a>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>

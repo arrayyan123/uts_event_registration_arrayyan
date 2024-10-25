@@ -133,7 +133,7 @@ if (isset($_POST['register_event'])) {
     
     $event = new Event();
     $event->registerEvent($user_id, $event_id);
-    header('Location: ../src/views/events_lists.php');
+    header('Location: ../src/views/register_participant.php?event_id=$event_id');
 }
 
 if (isset($_GET['cancel_event']) && isset($_GET['event_id'])) {

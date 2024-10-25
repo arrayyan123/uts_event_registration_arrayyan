@@ -64,10 +64,13 @@ class User {
         $params[] = $user_id;
         return $this->db->execute($sql, $params);
     }
-    
     public function getUserById($user_id) {
         $sql = "SELECT * FROM users WHERE id = ?";
         return $this->db->fetch($sql, [$user_id]);
+    }
+    public function deleteUserById($user_id) {
+        $sql = "DELETE FROM users WHERE id = ?";
+        return $this->db->execute($sql, [$user_id]);
     }
     
 

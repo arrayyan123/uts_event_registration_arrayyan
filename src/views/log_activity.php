@@ -6,12 +6,10 @@ if (!isset($_SESSION['user_id'])) {
     exit('User not logged in');
 }
 
-// Get data from AJAX request
 $user_id = $_SESSION['user_id'];
-$page = $_POST['page']; // Page name
-$time_spent = (int) $_POST['time_spent']; // Time spent in seconds
+$page = $_POST['page'];
+$time_spent = (int) $_POST['time_spent']; 
 
-// Insert the activity data into the database
 $database = new Database();
 $db = $database->getConnection();
 

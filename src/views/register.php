@@ -18,14 +18,14 @@ if (isset($_POST['register'])) {
     $role = $_POST['role'];
 
     if (!in_array($role, ['user', 'organizer'])) {
-        $error_message = 'Invalid role selected';
-        header('Location: register.php?error=' . urlencode($error_message));
+        $_SESSION['error_message'] = 'Invalid role selected';
+        header('Location: register.php');
         exit();
     }
 
     if ($user->isEmailExists($email)) {
-        $error_message = 'Email already exists';
-        header('Location: register.php?error=' . urlencode($error_message));
+        $_SESSION['error_message'] = 'Email already exists';
+        header('Location: register.php');
         exit();
     }
 
@@ -37,6 +37,10 @@ if (isset($_POST['register'])) {
         header('Location: register.php?error=' . urlencode($error_message));
         exit();
     }
+}
+if (isset($_SESSION['error_message'])) {
+    $error_message = $_SESSION['error_message'];
+    unset($_SESSION['error_message']);
 }
 ?>
 
@@ -52,7 +56,7 @@ if (isset($_POST['register'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         body {
-            background-color: #add8e6; /* Baby blue */
+            background-color: #add8e6;
         }
         .card {
             max-width: 500px;
@@ -71,6 +75,12 @@ if (isset($_POST['register'])) {
             z-index: 1;
             color: #aaa; /* Color for the eye icon */
         }
+        .success-message {
+            color: green;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -78,6 +88,9 @@ if (isset($_POST['register'])) {
         <div class="card shadow">
             <div class="card-body">
                 <h2 class="card-title text-center">Register</h2>
+                <?php if (!empty($error_message)) {?>
+                    <p class="success-message"><?php echo $error_message; ?></p>
+                <?php } ?>
                 <form action="register.php" method="POST">
                     <div class="mb-3 position-relative">
                         <label for="name" class="form-label">Name</label>
@@ -118,10 +131,8 @@ if (isset($_POST['register'])) {
         const eyeIcon = document.getElementById('eye-icon');
 
         togglePassword.addEventListener('click', function() {
-            // Toggle the password visibility
             const isPasswordVisible = passwordInput.type === 'text';
             passwordInput.type = isPasswordVisible ? 'password' : 'text';
-            // Toggle the eye icon
             eyeIcon.classList.toggle('bi-eye');
             eyeIcon.classList.toggle('bi-eye-slash');
         });

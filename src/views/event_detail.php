@@ -6,7 +6,7 @@ require_once __DIR__ .'/../../models/event.php';
 require_once __DIR__ .'/../../models/user.php';
 require_once __DIR__ .'/../../models/db.php';
 
-if (!isset($_GET['id'])) {
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     header('Location: home.php');
     exit;
 }
@@ -55,12 +55,10 @@ function getStatusClass($status) {
 <body>
     <div class="bg-gray-100">
         <div class="h-screen flex overflow-hidden bg-gray-200">
-            <!-- Sidebar -->
-
             <!-- Content -->
             <div class="flex-1 flex flex-col overflow-hidden">
                 <!-- Navbar -->
-
+                 
                 <!-- Content Body -->
                 <div class="flex-1 overflow-auto p-4">
                     <div class="bg-white p-4 rounded shadow">
@@ -88,10 +86,11 @@ function getStatusClass($status) {
                                         <button type="submit" name="cancel_registration" class="bg-red-500 text-white px-4 py-2 rounded">Cancel Registration</button>
                                     </form>
                                 <?php else: ?>
-                                    <form action="../../controllers/event_controller.php" method="POST">
-                                        <input type="hidden" name="event_id" value="<?php echo $event_detail['id']; ?>">
-                                        <button type="submit" name="register_event" class="bg-indigo-500 text-white px-4 py-2 rounded">Register for Event</button>
-                                    </form>
+                                    <?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user' && ($event['status']) === 'open'): ?>
+                                        <button class="bg-indigo-500 text-white px-4 py-2 rounded">
+                                            <a href="register_participant.php?event_id=<?php echo $event['id']; ?>">Register</a>
+                                        </button>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             <?php elseif ($event_detail['status'] === 'cancel'): ?>
                                 <div class="text-red-500">This event has been canceled and is no longer accepting registrations.</div>
@@ -120,7 +119,15 @@ function getStatusClass($status) {
             });
         </script>
     </div>
+    <script>
+        // Menampilkan status pengguna di konsol
+        const userRole = <?php echo json_encode(isset($_SESSION['role']) ? $_SESSION['role'] : 'guest'); ?>;
+        console.log("User Role:", userRole);
 
+        // Jika Anda ingin menampilkan ID pengguna juga
+        const userId = <?php echo json_encode(isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null); ?>;
+        console.log("User ID:", userId);
+    </script>
     <script>
         let startTime = Date.now();
 

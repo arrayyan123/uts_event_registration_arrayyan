@@ -1,4 +1,5 @@
 <?php
+
     $requestUri = isset($_SERVER['REQUEST_URI']) ? filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL) : '/';
 
     if ($requestUri === '/' || $requestUri === '') {
