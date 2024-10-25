@@ -41,38 +41,39 @@ if (isset($_POST['register'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register for Event - Eventure</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/style.css">
 </head>
-<body>
-    <div class="container mt-5">
+<body class="bg-gray-100 p-4">
+    <div class="container mx-auto mt-5">
         <header class="mb-4 text-center">
-            <h1>Register for Event</h1>
+            <h1 class="text-3xl font-bold">Register for Event</h1>
         </header>
         
-        <section class="card">
-            <img src="../../uploads/<?php echo htmlspecialchars($event_data['banner']); ?>" class="card-img-top" alt="Event Banner">
-            <div class="card-body">
-                <h2 class="card-title"><?php echo htmlspecialchars($event_data['event_name']); ?></h2>
-                <p class="card-text"><?php echo htmlspecialchars($event_data['description']); ?></p>
-                <p class="card-text"><strong>Date:</strong> <?php echo htmlspecialchars($event_data['event_date']); ?></p>
-                <p class="card-text"><strong>Location:</strong> <?php echo htmlspecialchars($event_data['location']); ?></p>
+        <section class="bg-white shadow-md rounded-lg overflow-hidden">
+            <img src="../../uploads/<?php echo htmlspecialchars($event_data['banner']); ?>" class="w-full h-64 object-cover" alt="Event Banner">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold"><?php echo htmlspecialchars($event_data['event_name']); ?></h2>
+                <p class="mt-2 text-gray-700 truncate"><?php echo htmlspecialchars($event_data['description']); ?></p>
+                <p class="mt-2 text-gray-700"><strong>Date:</strong> <?php echo htmlspecialchars($event_data['event_date']); ?></p>
+                <p class="mt-2 text-gray-700"><strong>Location:</strong> <?php echo htmlspecialchars($event_data['location']); ?></p>
                 
-                <form action="" method="POST">
-                    <div class="mb-3">
-                        <label for="participant_name" class="form-label">Your Name:</label>
-                        <input type="text" id="participant_name" name="participant_name" class="form-control" required>
+                <form action="" method="POST" class="mt-4">
+                    <div class="mb-4">
+                        <label for="participant_name" class="block text-sm font-medium text-gray-700">Your Name:</label>
+                        <input type="text" id="participant_name" name="participant_name" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300" required>
                     </div>
-                    <button type="submit" name="register" class="btn btn-primary">Confirm Registration</button>
+                    <button type="submit" name="register" class="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-500">Confirm Registration</button>
                 </form>
                 <?php if (isset($error_message)): ?>
-                    <div class="alert alert-danger mt-3"><?php echo $error_message; ?></div>
+                    <div class="mt-3 p-2 bg-red-200 text-red-800 rounded-md"><?php echo $error_message; ?></div>
                 <?php endif; ?>
             </div>
         </section>
         
-        <a href="home.php" class="btn btn-secondary mt-4">Back to Home</a>
+        <a href="home.php" class="mt-4 inline-block w-full py-2 text-center bg-gray-300 text-gray-800 font-semibold rounded-md hover:bg-gray-400">Back to Home</a>
     </div>
+
     <script>
         let startTime = Date.now();
 
@@ -88,6 +89,6 @@ if (isset($_POST['register'])) {
 
         window.addEventListener('beforeunload', logActivity);
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

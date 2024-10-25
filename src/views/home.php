@@ -161,6 +161,7 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                 </nav>
+                <!--Navbar end-->
                 <!-- Content Body -->
                 <div class="flex-1 overflow-auto m">
                     <div id="landing-page" class="relative bg-white h-screen w-screen">
