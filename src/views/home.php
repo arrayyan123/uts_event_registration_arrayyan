@@ -231,7 +231,7 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         </p>
                                     </div>
                                     <a href="event_detail.php?id=<?php echo $event['id']; ?>" class="block mt-2 text-indigo-500 hover:underline">View Details</a>
-                                    <?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user' && ($event['status']) === 'open'): ?>
+                                    <?php if (isset($_SESSION['user_id']) && ($event['status']) === 'open'): ?>
                                         <a href="register_participant.php?event_id=<?php echo $event['id']; ?>" class="block mt-2 text-indigo-500 hover:underline">Register</a>
                                     <?php endif; ?>
                                 </div>
