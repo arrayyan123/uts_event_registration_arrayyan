@@ -41,7 +41,7 @@ if (!empty($search)) {
     $events = $event->getAllEvents();
 }
 
-$query = "SELECT * FROM banner_promote ORDER BY LIMIT 10";
+$query = "SELECT * FROM banner_promote";
 $stmt = $db->prepare($query);
 $stmt->execute();
 $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
