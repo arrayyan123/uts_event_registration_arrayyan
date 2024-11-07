@@ -107,7 +107,7 @@ $banners = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Navbar -->
                 <?php require_once('navbar.php') ?>
                 <!-- Content Body -->
-                <div class="flex-1 overflow-auto">
+                <div class="flex-1 overflow-x-hidden">
                     <div id="landing-page" class="relative bg-white h-screen w-screen">
                         <div class="absolute inset-0 bg-gray-600 bg-opacity-60 z-10"></div>
                         <img src="../../assets/images/umn_build.jpg" class="absolute inset-0 h-full w-full object-cover z-0" alt="UMN Building">
