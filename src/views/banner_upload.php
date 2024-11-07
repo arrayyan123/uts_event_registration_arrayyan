@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $uploadOk = 0;
     }
 
-    $subtitle = isset($_POST['subtitle']) ? htmlspecialchars($_POST['subtitle']) : '';
-    $description = isset($_POST['description']) ? htmlspecialchars($_POST['description']) : '';
+    $subtitle = isset($_POST['subtitle']) ? ($_POST['subtitle']) : '';
+    $description = isset($_POST['description']) ? ($_POST['description']) : '';
 
     if ($uploadOk == 1) {
         if (move_uploaded_file($_FILES["banner_image"]["tmp_name"], $target_file)) {
@@ -203,13 +203,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
             <!--konten di dalam sini -->
             <form action="banner_upload.php" method="post" enctype="multipart/form-data" class="space-y-4">
-
                 <div id="drop_area" class="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100">
                     <input type="file" name="banner_image" id="banner_image" class="hidden" required>
                     <p class="text-gray-500">Drag and drop your image here or click to upload</p>
                 </div>
-                <input type="text" name="subtitle" placeholder="Enter subtitle" required>
-                <textarea name="description" placeholder="Enter description" required></textarea>
+                <input type="text" name="subtitle" placeholder="Enter subtitle" required
+                   class="w-full p-2 border border-gray-300 rounded-lg dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                <!-- Description Textarea -->
+                <textarea name="description" placeholder="Enter description" required
+                      class="w-full p-2 border border-gray-300 rounded-lg dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
                 <!-- Image preview -->
                 <div class="mt-4">
                     <img id="image_preview" src="" alt="Image preview" class="hidden max-w-xs max-h-52 border border-gray-300 rounded-lg"/>
@@ -222,7 +224,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </button>
         </div>
     </div>
-
     <!-- script untuk image preview nya dan drag drop gambar nya ;) -->
     <script>
         const dropArea = document.getElementById('drop_area');
@@ -265,7 +266,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             imagePreview.classList.remove('hidden');
         }
     </script>
-
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>

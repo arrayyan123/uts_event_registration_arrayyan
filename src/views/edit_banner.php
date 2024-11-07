@@ -52,12 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="edit_banner.php?id=<?php echo $banner_id; ?>" method="POST" class="space-y-4">
             <div>
                 <label for="subtitle" class="block text-sm font-medium text-gray-700">Subtitle</label>
-                <input type="text" name="subtitle" id="subtitle" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm" value="<?php echo htmlspecialchars($banner['subtitle']); ?>" required>
+                <input type="text" name="subtitle" id="subtitle" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm" value="<?php echo ($banner['subtitle']); ?>" required>
             </div>
 
             <div>
                 <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                <textarea name="description" id="description" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm" required><?php echo htmlspecialchars($banner['description']); ?></textarea>
+                <textarea name="description" id="description" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm" required><?php echo ($banner['description']); ?></textarea>
             </div>
 
             <input type="submit" value="Update Banner" class="px-4 py-2 bg-indigo-600 text-white rounded cursor-pointer hover:bg-indigo-700">
